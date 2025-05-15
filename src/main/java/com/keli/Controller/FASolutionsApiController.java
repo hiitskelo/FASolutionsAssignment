@@ -15,10 +15,9 @@ import java.time.LocalDate;
 public class FASolutionsApiController {
 
     @GetMapping
-    public ResponseEntity<String> getResponse(@PathVariable @NotNull Integer id,
+    public ResponseEntity<byte[]> getResponse(@PathVariable @NotNull Integer id,
                                                      @PathVariable @NotNull LocalDate from,
                                                      @PathVariable @NotNull LocalDate to) {
-        new FASolutionsApiConsumer(new RequestObject(id, from, to)).getReport();
-        return ResponseEntity.ok("OK");
+        return ResponseEntity.ok(new FASolutionsApiConsumer(new RequestObject(id, from, to)).getReport());
     }
 }
