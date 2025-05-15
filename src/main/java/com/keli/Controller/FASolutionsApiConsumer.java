@@ -2,7 +2,6 @@ package com.keli.Controller;
 
 import com.keli.Utilities.Utils;
 import com.keli.Utilities.RequestObject;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -18,21 +17,33 @@ public class FASolutionsApiConsumer {
     }
 
     public RequestObject getReport() {
-        String url = "https://example.com/graphql";
-        String username = "myUser";
-        String password = "myPassword";
+        String url = "https://tryme.fasolutions.com";
+        String username = "recruitment-assignment";
+        String password = "vbv981t!sG(a";
 
         // Encode credentials
         String basicAuth = "Basic " + Utils.encodeBasicAuth(username, password);
 
         // Create GraphQL query
-        String query = "{ portfolio(id: \""+ requestObject + "\", from:\"" + requestObject.getFrom() + "\", to:\"" + requestObject.getTo() + "\") { name email } }";
+        String queryCall = "{ portfolio(id: \""+ requestObject.getId() + "\", from:\"" + requestObject.getFrom() + "\", to:\"" + requestObject.getTo() + "\")";
+        String parameters = "{shortName\n" +
+                "    transactions{\n" +
+                "      security{\n" +
+                "        name\n" +
+                "        isinCode\n" +
+                "      }\n" +
+                "      currencyCode\n" +
+                "      amount\n" +
+                "      unitPrice\n" +
+                "      tradeAmount\n" +
+                "      typeName\n" +
+                "      transactionDate\n" +
+                "      settlementDate\n" +
+                "    }\n" +
+                "  }\n" +
+                "}";
         JSONObject json = new JSONObject();
-        try {
-            json.put("query", query);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
+        json.put("query", queryCall + parameters);
 
         // Set headers
         HttpHeaders headers = new HttpHeaders();
