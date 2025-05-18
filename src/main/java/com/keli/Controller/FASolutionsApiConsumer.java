@@ -29,7 +29,7 @@ public class FASolutionsApiConsumer {
         // Create GraphQL query
         String queryCall = "{ portfolio(id: \"" + requestObject.getId() + "\") \n\t";
         String parameters = "{shortName\n" +
-                "    transactions{\n" +
+                "    transactions(status:\"OK\", startDate: \"" + requestObject.getFrom() + "\", endDate:\"" + requestObject.getTo() + "\"){\n" +
                 "      security{\n" +
                 "        name\n" +
                 "        isinCode\n" +
@@ -73,7 +73,7 @@ public class FASolutionsApiConsumer {
     }
 
     private String getCsvFile(GraphQLResponse body) {
-        StringBuilder content = new StringBuilder("Short name;Security name;ISIN code;Currency code;Amount;Unit price;Trade amount;Type name;Transaction date;Settlement date;\n");
+        StringBuilder content = new StringBuilder("Short name;Security name;ISIN code;Currency code;Amount;Unit price;Trade amount;Type name;Transaction date;Settlement date;</BR>");
         body.getData().getPortfolio().getTransactions().forEach(t -> {
             content.append(body.getData().getPortfolio().getShortName()).append(";");
             if (null != t.getSecurity()) {
@@ -87,7 +87,7 @@ public class FASolutionsApiConsumer {
             content.append(t.getTradeAmount()).append(";");
             content.append(t.getTypeName()).append(";");
             content.append(t.getTransactionDate()).append(";");
-            content.append(t.getSettlementDate()).append(";\n");
+            content.append(t.getSettlementDate()).append(";</BR>");
         });
         return content.toString();
     }
